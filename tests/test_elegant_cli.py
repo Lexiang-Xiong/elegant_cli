@@ -157,5 +157,24 @@ def test_override_logic_complex(cli):
     args2 = cli.run(["main.exe", "-o", "my.md"])
     assert args2.o == "my.md"
 
+def test_help_flag_bypass(cli, capsys):
+    """
+    测试 Help 旁路机制：
+    即便配置了默认子命令 (by_config)，输入 -h 也应该显示 Root 帮助，而不是跳转后的帮助。
+    """
+    # Argparse 遇到 -h 会抛出 SystemExit，这是预期行为
+    with pytest.raises(SystemExit):
+        cli.run(["cb", "-h"])
+    
+    # 捕获 stdout
+    captured = capsys.readouterr()
+    
+    # 验证显示的是 Root 层的帮助信息 (包含所有子命令)
+    assert "usage:" in captured.out
+    assert "{scan,by_config,by_ext}" in captured.out
+    # 确保没有进入 specific 子命令的帮助 (比如 by_config 的特有参数 -c)
+    # 注意：如果 root 也有 -c 这里的断言要小心，但在我们的测试 Schema 里 root 没有 -c
+    assert "[-c C]" not in captured.out
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

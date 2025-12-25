@@ -14,6 +14,11 @@ class ElegantCLI:
             argv = sys.argv
         
         raw_args = argv[1:] if argv else []
+
+        # 如果检测到帮助标志，直接使用原生 Argparse 行为，不进行语义注入。
+        # 这样 cb -h 会显示 Root Help，而不是跳到默认子命令的 Help。
+        if "-h" in raw_args or "--help" in raw_args:
+            return self.build_parser().parse_args(raw_args)
         
         # 1. 语义解析
         final_args = self.resolve(raw_args)
