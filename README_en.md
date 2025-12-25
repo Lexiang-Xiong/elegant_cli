@@ -14,7 +14,7 @@ Ideal for quickly building tool scripts that contain multi-level subcommands and
 ## 📦 Installation
 
 ```bash
-pip install git+https://github.com/Lexiang-Xiong/elegant-cli.git
+pip install git+https://github.com/Lexiang-Xiong/elegant_cli.git
 ```
 
 ## ⚡ Concise Example

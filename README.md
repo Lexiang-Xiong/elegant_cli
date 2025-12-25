@@ -14,7 +14,7 @@
 ## 📦 安装
 
 ```bash
-pip install git+https://github.com/Lexiang-Xiong/elegant-cli.git
+pip install git+https://github.com/Lexiang-Xiong/elegant_cli.git
 ```
 
 ## ⚡ 极简示例
