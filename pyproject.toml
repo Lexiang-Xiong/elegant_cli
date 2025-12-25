@@ -1,0 +1,11 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "elegant-cli"
+version = "0.1.0"
+description = "A configuration-driven semantic CLI engine."
+authors = [{name = "Your Name", email = "your@email.com"}]
+license = {text = "MIT"}
+requires-python = ">=3.7"
