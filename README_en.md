@@ -108,6 +108,9 @@ if __name__ == "__main__":
     Directory: /tmp
     ```
 
+### LLM collaborative use
+If you want to quickly integrate ElegantCLI in a project based on LLM automatic development, you can refer to [LLM_PROMPT.md](LLM_PROMPT.md) and send the file to LLM if necessary.
+
 ## 📄 License
 
 MIT License

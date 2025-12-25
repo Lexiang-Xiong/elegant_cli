@@ -108,6 +108,10 @@ if __name__ == "__main__":
     操作目录: /tmp
     ```
 
+### LLM协同使用
+
+在基于LLM自动开发的项目中希望快速集成ElegantCLI，可以参考[LLM_PROMPT.md](LLM_PROMPT.md)，必要时将该文件发给LLM即可。
+
 ## 📄 License
 
 MIT License
