@@ -80,8 +80,14 @@ class ElegantCLI:
                 break
         
         if not found_cmd:
+            # 没找到显式命令，尝试提取位置参数 (仅 Root 层有效)
             if is_root and remaining and not remaining[0].startswith("-"):
                 positional_val = remaining[0]
+                child_tokens = remaining[1:]
+            else:
+                child_tokens = remaining
+            
+            # 使用默认子命令
             target_cmd = sub_cmds.get("__default__")
 
         # Root层位置参数默认值
