@@ -8,6 +8,8 @@
 - **Recursive Routing (递归路由)**: 支持 `sub_command` 中嵌套 `sub_command`，实现无限层级命令（如 `git remote add`）。
 - **Context Overrides (上下文覆盖)**: 子命令（无论多深）都可以通过 `overrides` 修改父级参数的默认值。
 - **Auto Injection (智能注入)**: 自动处理位置参数与 Flag 的冲突，自动推导参数类型。
+- **Smart Help (智能帮助)**: 自动识别上下文，正确显示 `-h` 帮助信息。
+- **Static Validation (静态校验)**: 启动时严格检查 Schema 配置。
 
 ## 2. 代码模板 (Master Template)
 
@@ -78,11 +80,20 @@ CLI_SCHEMA = {
 }
 
 def main():
-    # 1. 启动引擎
-    # 返回标准的 argparse.Namespace 对象
-    args = ElegantCLI(CLI_SCHEMA).run()
+    # --- 1. 初始化与校验 ---
+    try:
+        cli = ElegantCLI(CLI_SCHEMA)
+    except ConfigurationError as e:
+        # 开发阶段的配置错误应立即暴露并终止
+        print(f"Error in CLI Schema: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    # --- 2. 运行解析 ---
+    # 用户输入错误（如参数类型不对）会在内部自动处理并退出，无需 try-except
+    args = cli.run()
     
-    # 2. 业务逻辑
+    # --- 3. 业务逻辑与参数访问 ---
+    # 所有参数（包括 Flag）都被扁平化为属性
     # 注意：参数名会自动转换为属性 (例如 --dry-run 变为 args.dry_run)
     print(f"Working Dir: {args.work_dir}") 
     print(f"Config: {args.c}")
@@ -131,7 +142,7 @@ Schema 是一个嵌套字典结构。
 
 ### `sub_command` (递归路由)
 定义当前层级的子命令。
-- **`__default__`**: (String) 当用户未输入子命令时的默认跳转目标。
+- **`__default__`**: (String) 当用户未输入子命令时的默认跳转目标，必须对应下方定义的某个 Key。
 - **Key**: (String) 子命令名称 (如 `scan`, `deploy`)。
 - **Value**: (Dict) 该子命令的 Schema 节点。**该节点内可再次包含 `sub_command` 以实现无限嵌套。**
 
